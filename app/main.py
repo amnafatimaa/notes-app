@@ -1,15 +1,15 @@
-from typing import Union
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pymongo import MongoClient
+from app.database import user1
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-conn = MongoClient("mongodb+srv://amnafatima:bchj27rx82n23@cluster0.favwijf.mongodb.net/notes")
+conn = MongoClient(user1)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, id: str):

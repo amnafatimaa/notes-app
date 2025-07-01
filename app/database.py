@@ -1,0 +1,1 @@
+user1 = "mongodb+srv://amnafatima:bchj27rx82n23@cluster0.favwijf.mongodb.net/notes"
