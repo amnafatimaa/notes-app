@@ -51,34 +51,38 @@
     </nav>
     <div class="container">
       <h1>Start taking your notes with iNotes!</h1>
-      <form>
+      <form method="post">
         <div class="mb-3">
-          <label for="title" class="form-label"
-            >Note title</label
-          >
+          <label for="noteTitle" class="form-label">Note Title</label>
           <input
             type="text"
             class="form-control"
-            id="title"
-            aria-describedby="emailHelp"
+            id="noteTitle"
+            aria-describedby="titleHelp"
           />
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
-          />
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1"
-            >Check me out</label
+          <small id="titleHelp" class="form-text text-muted"
+            >Enter a title for your note.</small
           >
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="mb-3">
+          <label for="noteContent" class="form-label">Note Content</label>
+          <textarea
+            class="form-control"
+            id="noteContent"
+            rows="3"
+            aria-describedby="contentHelp"
+          ></textarea>
+          <small id="contentHelp" class="form-text text-muted"
+            >Write your note here.</small
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Add Note</button>
       </form>
+    </div>
+    <div class="container">
+      {% for item in newDocs %}
+      <li><a href="{{ item.href }}">{{ item.note }}</a></li>
+      {% endfor %}
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

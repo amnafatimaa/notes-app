@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from typing import Optional
 import os
+from bson.objectid import ObjectId
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -27,20 +28,26 @@ except Exception as e:
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     try:
-        docs = list(conn.notes.notes.find({}))
+        docs = conn.notes.notes.find({})
         newDocs = []
-        for doc in docs: 
+        for doc in docs:
             newDocs.append({
-                "id": str(doc.get("_id", "")),
-                "note": doc.get("note", ""),
+                "id": str(doc.get("_id")),
+                "note": doc.get("note"),
             })
         return templates.TemplateResponse("index.html", {"request": request, "newDocs": newDocs})
     except Exception as e:
+        print(f"Error in / endpoint: {e}")
         return HTMLResponse(f"Error fetching notes: {e}", status_code=500)
 
 @app.get("/item/{item_id}")
-def read_items(item_id: int, q: Optional[str] = None):
-    """
-    Retrieve an item by its ID, with an optional query parameter.
-    """
-    return {"item_id": item_id, "q": q}
+async def read_items(item_id: str, q: Optional[str] = None):
+    try:
+        db = conn["notes"]
+        doc = db.notes.find_one({"_id": ObjectId(item_id)})
+        if doc:
+            return {"item_id": item_id, "note": doc.get("note", ""), "q": q}
+        return {"error": "Item not found"}
+    except Exception as e:
+        print(f"Error in /item endpoint: {e}")
+        return {"error": str(e)}
