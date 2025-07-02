@@ -3,3 +3,6 @@ __pycache__/
 .vscode/
 venv/
 *.log
+database.db
+database.py
+.env
